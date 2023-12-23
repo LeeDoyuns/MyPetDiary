@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:minSdkVersion="33" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyPetDiary"
+        tools:targetApi="31">
+        <activity
+            android:name=".activity.pet.PetMainHomeActivity"
+            android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.chunbae.mypetdiary.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".activity.main.LoadingActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.write.VeterinaryDiary"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.UserJoinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.popup.WritePopupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.popup.ListViewPopupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pet.PetAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pet.PetListMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.main.NewUserMainActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".activity.main.HomeActivity"
+            android:exported="false" /> <!-- image crop -->
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" /> <!-- 사진 촬영 후 이미지파일 생성을 위한 provider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.chunbae.mypetdiary.images.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/external" />
+        </provider>
+    </application>
+
+</manifest>
