@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="defulatSystemFont1" parent="@android:style/Widget.DeviceDefault.TextView" >
+        <item name="fontFamily">@font/katuri_font</item>
+    </style>
+    <style name="defulatSystemFont2" parent="@android:style/Widget.DeviceDefault.Button.Borderless" >
+        <item name="fontFamily">@font/katuri_font</item>
+    </style>
+    <style name="defulatSystemFont3" parent="@android:style/Widget.DeviceDefault.EditText" >
+        <item name="fontFamily">@font/katuri_font</item>
+    </style>
+    <style name="defulatSystemFont4" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton" >
+        <item name="fontFamily">@font/katuri_font</item>
+    </style>
+    <style name="defulatSystemFont5" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox" >
+        <item name="fontFamily">@font/katuri_font</item>
+    </style>
+
+</resources>

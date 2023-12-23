@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.user.UserJoinActivity">
+
+    <TextView
+        android:id="@+id/tv_join_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:text="계정 등록"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/tv_radius"
+        />
+
+    <EditText
+        android:id="@+id/et_join_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_join_title"
+        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="40dp"
+        android:hint="아이디를 입력해주세요"
+        />
+
+    <EditText
+        android:id="@+id/et_join_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_join_id"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="40dp"
+        android:hint="패스워드를 입력해주세요"
+        />
+
+    <EditText
+        android:id="@+id/et_join_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_join_password"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="40dp"
+        android:hint="사용하실 닉네임을 입력해주세요"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:text="기기변경 시에 데이터를 보존하기 위한\n 계정 정보를 입력해주세요."
+        app:layout_constraintTop_toBottomOf="@id/et_join_nickname"
+        android:layout_marginTop="40dp"
+        />
+
+    <Button
+        android:id="@+id/btn_user_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginBottom="30dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
