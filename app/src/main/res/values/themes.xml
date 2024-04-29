@@ -7,4 +7,20 @@
     </style>
 
     <style name="Theme.MyPetDiary" parent="Base.Theme.MyPetDiary" />
+
+    <style name="numberPickerCustom">
+        <item name="android:textSize">15sp</item>
+        <item name="editTextColor">@color/listview_title</item>
+        <item name="backgroundColor">@color/gray</item>
+    </style>
+
+    <style name="materialCalendarCustom">
+        <item name="android:background">@color/invisible</item>   <!--달력 백그라운드 컬러-->
+        <item name="mcv_selectionColor">@color/gray</item>
+    </style>
+
+    <style name="bottom_menu">
+        <item name="itemIconTint">@color/white</item>
+        <item name="background">@color/black</item>
+    </style>
 </resources>

@@ -1,5 +1,6 @@
 package com.chunbae.mypetdiary.db.domain.pet
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity

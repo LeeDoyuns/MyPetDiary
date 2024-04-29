@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/app_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.pet.PetMainHomeActivity">
@@ -11,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigationbar"
         >
-
 
     </FrameLayout>
 
@@ -25,7 +26,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_bar"
         app:flow_horizontalAlign="center"
-        android:background="@color/white"
+        app:itemIconTint="@color/white"
+        android:backgroundTint="@color/black"
         app:labelVisibilityMode="unlabeled"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

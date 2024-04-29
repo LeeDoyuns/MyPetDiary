@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -11,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.chunbae.mypetdiary.common.ImageTypeConverter
 import com.chunbae.mypetdiary.common.code.CommonRequestCode
@@ -35,6 +37,7 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
     private lateinit var petDao: PetDao
 
 
+//    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -42,8 +45,12 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
         petDao = AppRoomDatabase.getDatabase(this).getPetDao()
         datePickerDialog = DatePickerDialog(this)
         datePickerDialog.initYear(binding.etBirthYear)
+        setComponent()
     }
 
+    fun setComponent () {
+//        binding.etBirthYear.textColor = Color.BLACK
+    }
 
     private fun btnBind() {
         //이미지 추가 버튼 이벤트
@@ -92,7 +99,7 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
         }
         Thread{
             val pet = Pet(name, birth, meetDate, weight, imgencodeByteArray)
-            petDao.insertPetInfo(pet)
+            petDao.insertPetInfo(pet).run { Log.d("MyPetDiaryLogs", this.toString()) }
             runOnUiThread{
                 makeShortToast("등록되었습니다.")
                 finish()
@@ -145,7 +152,6 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
                 imgUrl = Uri.parse(result)
                 var bitmap = convertBitmap(imgUrl)
                 //roomdatabase에 넣을 수 있게 타입 변환
-
                 imgencodeByteArray = imageConverter.toByteArray(bitmap)
                 binding.petImgAddBtn.setImageBitmap(bitmap)
             }
@@ -191,14 +197,15 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
                     val source =
                         ImageDecoder.createSource(this.contentResolver, uri)
                     Log.d("MyPetDiaryLogs", "image source= ${source}")
-                    bitmap = ImageDecoder.decodeBitmap(source)
+                    bitmap = ImageDecoder.decodeBitmap(source, ImageDecoder.OnHeaderDecodedListener { decoder, info, source ->
+                        decoder.setTargetSize(200, 200)
+                    })
                 }else{
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri)
                 }
             }catch (e: IOException){
                 e.printStackTrace()
             }
-            Log.d("MyPetDiaryLogs", "convertBitmap = ${bitmap.toString()}")
         }
         return bitmap!!
     }

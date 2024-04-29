@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/app_main"
     android:layout_height="match_parent"
     tools:context=".activity.pet.PetAddActivity">
 
@@ -55,6 +56,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="2dp"
         android:clickable="true"
+        android:theme="@style/numberPickerCustom"
         android:inputType="none"
         android:background="@drawable/border_table"
         />

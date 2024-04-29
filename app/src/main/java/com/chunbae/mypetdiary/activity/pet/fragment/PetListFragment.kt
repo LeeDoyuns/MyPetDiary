@@ -2,6 +2,7 @@ package com.chunbae.mypetdiary.activity.pet.fragment
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -59,22 +60,29 @@ class PetListFragment : Fragment() {
         }
     }
 
-
     fun settingPetList(petList: ArrayList<Pet>) {
         //한마리만 등록한 경우, 바로 펫홈으로 보내준다..? 펫 추가하게 냅두기로 변경.
         /*
         if(petList.size == 1){
             petList[0].id?.let { selectPet(it) }
         }*/
-
         var flexboxLayout = root.findViewById<FlexboxLayout>(R.id.flex_layout)!!
         flexboxLayout.removeAllViews()
 
         if (petList.isNotEmpty()) {
+            var receivedData = 0L
+            if(arguments?.getLong("petId") != null){
+                receivedData = arguments?.getLong("petId")!!
+            }
             for ((idx, pet) in petList.withIndex()) {
                 var btn = makeCircleImageButton(pet)
                 btn.setOnClickListener { selectPet(pet.id!!) }
                 flexboxLayout.addView(btn, idx)
+                //선택한 petId로 선택 표시해줌
+                if(receivedData != null && pet.id == receivedData){
+                    btn.borderColor = ContextCompat.getColor(requireContext(), R.color.black)
+                    btn.borderWidth = 10
+                }
             }
         }
         if(context is PetListMainActivity) {

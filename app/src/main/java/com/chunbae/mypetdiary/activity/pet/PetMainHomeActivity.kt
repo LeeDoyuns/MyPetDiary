@@ -3,10 +3,9 @@ package com.chunbae.mypetdiary.activity.pet
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import com.chunbae.mypetdiary.MainHomeFragment
+import com.chunbae.mypetdiary.activity.main.fragment.MainHomeFragment
 import com.chunbae.mypetdiary.R
 import com.chunbae.mypetdiary.activity.pet.fragment.FragmentEventListener
-import com.chunbae.mypetdiary.activity.pet.fragment.PetListFragment
 import com.chunbae.mypetdiary.activity.viewmodel.pet.VMPetList
 import com.chunbae.mypetdiary.common.activitys.BaseActivity
 import com.chunbae.mypetdiary.databinding.ActivityPetMainHomeBinding
@@ -21,14 +20,20 @@ class PetMainHomeActivity : BaseActivity<ActivityPetMainHomeBinding>({ActivityPe
 
     private lateinit var vmPetList: VMPetList
     private lateinit var petDao: PetDao
+    private var petId: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
         setContentView(binding.root)
-        setFragment()
         setPetList()
         setBottomNavigationBarEvent()
+
+        var intent = intent
+        if(intent.hasExtra("petId")){
+            this.petId = intent.getLongExtra("petId", 0L)
+            setFragment()
+        }
     }
 
     //DB, ViewModel 초기화
@@ -57,6 +62,9 @@ class PetMainHomeActivity : BaseActivity<ActivityPetMainHomeBinding>({ActivityPe
     //Mainhome(달력이 있는 화면) fragment를 넣는다.
     private fun setFragment(){
         var frame: MainHomeFragment = MainHomeFragment()
+        val bundle = Bundle()
+        bundle.putLong("petId", this.petId)
+        frame.arguments = bundle
         supportFragmentManager.beginTransaction()
             .replace(binding.contentFrame.id, frame)
             .commit()
@@ -65,7 +73,6 @@ class PetMainHomeActivity : BaseActivity<ActivityPetMainHomeBinding>({ActivityPe
     private fun setPetList(){
         Thread{
             var petList: ArrayList<Pet>  = ArrayList(petDao.selectAllPets())
-            Log.d("MyPetDiaryLogs", "petList => ${petList}")
             if(petList.isNotEmpty()){
                 runOnUiThread {
                     vmPetList.setData(petList)

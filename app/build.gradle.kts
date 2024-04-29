@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.chunbae.mypetdiary"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -74,14 +74,10 @@ dependencies {
      implementation("androidx.activity:activity-ktx:1.8.0")
 
 
-    var calendarVersion = "1.0.4"
-    coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:<latest-version>")
-    //캘린더 라이브러리 관련. https://github.com/kizitonwose/Calendar
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.0.2")
-
     // The view calendar library
     implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
-
+    //meterial design
+    implementation("com.google.android.material:material:1.5.0")
 
     //동그란 이미지를 위한 lib
     implementation("de.hdodenhof:circleimageview:3.1.0")
@@ -91,6 +87,5 @@ dependencies {
 
     //자동 개행 layout
     // https://mvnrepository.com/artifact/com.google.android/flexbox
-//    implementation("com.google.android:flexbox:1.0.0")
         implementation("com.google.android.flexbox:flexbox:3.0.0")
 }

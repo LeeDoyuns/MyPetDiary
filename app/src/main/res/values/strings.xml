@@ -15,6 +15,10 @@
     <string name="home">홈</string>
     <string name="write">메모 작성</string>
     <string name="report">보고서</string>
+    <string-array name="arr_unit">
+        <item>ml</item>
+        <item>mg</item>
+    </string-array>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -104,11 +108,13 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="visit_veterinary">병원 방문</string>
+    <string name="take_medicine">복약일지</string>
+    <string name="write_symptom">증상기록</string>
+    <string name="write_etc">기타 사항</string>
     <!--    <string name=""></string>-->
     <!--    <string name=""></string>-->
     <!--    <string name=""></string>-->
     <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
+    
 </resources>

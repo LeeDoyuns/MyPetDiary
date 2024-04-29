@@ -32,7 +32,7 @@ class PetListMainActivity : BaseActivity<ActivityPetListMainBinding>({ActivityPe
         petDao = AppRoomDatabase.getDatabase(this).getPetDao()
         setContentView(binding.root)
         setBtnClickEvent()//테스트용 버튼(전체 삭제)
-
+        setPetList()
         var intent = intent
         if(intent.hasExtra("nickname")){
             binding.nickname.setText("${intent.getStringExtra("nickname")}님 어서오세요.")
@@ -57,6 +57,7 @@ class PetListMainActivity : BaseActivity<ActivityPetListMainBinding>({ActivityPe
 
 
     private fun selectPet(petId: Long){
+        Log.d("MyPetDiaryLogs", "selected petid -> ${petId}")
         var intent:Intent = Intent(this, PetMainHomeActivity::class.java)
         intent.putExtra("petId", petId)
         startActivity(intent)
@@ -83,5 +84,16 @@ class PetListMainActivity : BaseActivity<ActivityPetListMainBinding>({ActivityPe
         }else if(text === CommonStringCode.ADD_PET.value){
             movePetAddPage()
         }
+    }
+
+    private fun setPetList(){
+        Thread{
+            var petList: ArrayList<Pet>  = ArrayList(petDao.selectAllPets())
+            if(petList.isNotEmpty()){
+                runOnUiThread {
+                    vmPetList.setData(petList)
+                }
+            }
+        }.start()
     }
 }

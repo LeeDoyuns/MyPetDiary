@@ -5,6 +5,7 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
@@ -18,13 +19,19 @@ class ImageTypeConverter {
     @TypeConverter
     fun toByteArray(bitmap: Bitmap): ByteArray {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){ //안드로이드 버전 30이상이라면
+            bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 60, outputStream)   //원본 대비 60% 품질 이미지로 변환
+        }else{  //그 이하
+            bitmap.compress(Bitmap.CompressFormat.WEBP, 60, outputStream)   //원본 대비 60% 품질 이미지로 변환
+        }
         return outputStream.toByteArray()
     }
 
     @TypeConverter
     fun toBitmap(byteArray: ByteArray): Bitmap {
-        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        var bitmapOption = BitmapFactory.Options()
+        bitmapOption.inSampleSize = 3   //이미지 크기 1/3으로 줄임.
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, bitmapOption)
     }
 
     @TypeConverter
