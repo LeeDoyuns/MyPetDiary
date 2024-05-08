@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -30,6 +32,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.UUID
 
 abstract class BaseActivity<T: ViewBinding> (
     val bindingFactory: (LayoutInflater) -> T
@@ -187,27 +190,6 @@ abstract class BaseActivity<T: ViewBinding> (
 
         return circleButton
     }
-
-// 각 activity에서 가져다 쓸것.
-//fun openCamera() {
-//   val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//   if(takePictureIntent.resolveActivity(packageManager) != null)
-//       takePicture.launch(null)
-//}
-//
-//fun openGallery(){
-//       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){  //티라미수 이후로는 pickmedia 사용
-//           Log.d("MyPetDiaryLogs", "갤러리에서 선택함. ${pickMedia.launch(PickVisualMediaRequest())}")
-//   }else{
-//       val intent = Intent(Intent.ACTION_GET_CONTENT)
-//       intent.type = "image/*"
-//      return  imageRequest.launch(intent)
-//   }
-//
-//}
-//
-
-
 
 
 }

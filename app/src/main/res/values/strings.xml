@@ -16,6 +16,7 @@
     <string name="write">메모 작성</string>
     <string name="report">보고서</string>
     <string-array name="arr_unit">
+        <item>T</item>
         <item>ml</item>
         <item>mg</item>
     </string-array>
@@ -112,9 +113,17 @@
     <string name="take_medicine">복약일지</string>
     <string name="write_symptom">증상기록</string>
     <string name="write_etc">기타 사항</string>
-    <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
-    <!--    <string name=""></string>-->
-    
+    <string name="veterinary_report">병원기록</string>
+    <string name="date">날짜</string>
+    <string name="veterinary_name">병원명</string>
+    <string name="kg">KG</string>
+    <string name="treat_contents">진료내용</string>
+    <string name="treat_result_contents">진료내역, 결과를 입력해주세요.(이미지 파일 최대 6장)</string>
+    <string name="add_photos">사진첨부</string>
+    <string name="prescription_drug">처방약</string>
+    <string name="drug_name">약품 명:Almagel</string>
+    <string name="volume">용량</string>
+    <string name="save">저장</string>
+
+
 </resources>

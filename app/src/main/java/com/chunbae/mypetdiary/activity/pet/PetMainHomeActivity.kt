@@ -1,6 +1,8 @@
 package com.chunbae.mypetdiary.activity.pet
 
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.chunbae.mypetdiary.activity.main.fragment.MainHomeFragment
@@ -12,6 +14,7 @@ import com.chunbae.mypetdiary.databinding.ActivityPetMainHomeBinding
 import com.chunbae.mypetdiary.db.AppRoomDatabase
 import com.chunbae.mypetdiary.db.dao.PetDao
 import com.chunbae.mypetdiary.db.domain.pet.Pet
+import java.util.UUID
 
 /**
 * 본격적인 메인화면.
@@ -31,7 +34,8 @@ class PetMainHomeActivity : BaseActivity<ActivityPetMainHomeBinding>({ActivityPe
 
         var intent = intent
         if(intent.hasExtra("petId")){
-            this.petId = intent.getLongExtra("petId", 0L)
+            petId = intent.getLongExtra("petId", 0L)
+            Log.d("MyPetDiaryLogs", "${petId}")
             setFragment()
         }
     }
@@ -85,4 +89,5 @@ class PetMainHomeActivity : BaseActivity<ActivityPetMainHomeBinding>({ActivityPe
     override fun onFragmentEvent(text: String, obj: Any?) {
         Log.d("MyPetDiaryLogs", "PetMainHomeAcvitiry = fragment start")
     }
+
 }

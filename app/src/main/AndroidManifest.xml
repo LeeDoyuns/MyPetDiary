@@ -28,8 +28,11 @@
         android:theme="@style/Theme.MyPetDiary"
         tools:targetApi="31">
         <activity
-            android:name=".activity.popup.MenuSelectPop"
+            android:name=".activity.inquiry.IVeterinaryDiaryActivity"
             android:exported="false" />
+        <!-- <activity -->
+        <!-- android:name=".activity.popup.MenuSelectPop" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".activity.pet.PetMainHomeActivity"
             android:exported="false" />
@@ -54,7 +57,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.write.VeterinaryDiaryActivity"
+            android:name=".activity.write.WVeterinaryDiaryActivity"
             android:exported="false" />
         <activity
             android:name=".activity.user.UserJoinActivity"
@@ -73,16 +76,17 @@
             android:exported="false" />
         <activity
             android:name=".activity.main.NewUserMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.main.HomeActivity"
-            android:exported="false" /> <!-- image crop -->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".activity.main.HomeActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- image crop -->
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" /> <!-- 사진 촬영 후 이미지파일 생성을 위한 provider -->
+<!--         <activity-->
+<!--         android:name=".activity.pet.PetListMainActivity"-->
+<!--         android:exported="false" />-->
+        <!-- 사진 촬영 후 이미지파일 생성을 위한 provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.chunbae.mypetdiary.images.fileProvider"

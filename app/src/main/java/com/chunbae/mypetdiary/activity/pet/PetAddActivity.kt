@@ -1,10 +1,10 @@
 package com.chunbae.mypetdiary.activity.pet
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.chunbae.mypetdiary.common.ImageTypeConverter
 import com.chunbae.mypetdiary.common.code.CommonRequestCode
@@ -20,6 +19,7 @@ import com.chunbae.mypetdiary.common.DatePickerDialog
 import com.chunbae.mypetdiary.common.activitys.BaseActivity
 import com.chunbae.mypetdiary.databinding.ActivityPetAddBinding
 import com.chunbae.mypetdiary.db.AppRoomDatabase
+import com.chunbae.mypetdiary.db.dao.GuardianDao
 import com.chunbae.mypetdiary.db.dao.PetDao
 import com.chunbae.mypetdiary.db.domain.pet.Pet
 import java.io.IOException
@@ -35,6 +35,7 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
 
     private lateinit var db: AppRoomDatabase
     private lateinit var petDao: PetDao
+    private lateinit var guardianDao: GuardianDao
 
 
 //    @RequiresApi(Build.VERSION_CODES.Q)
@@ -43,6 +44,7 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
         setContentView(binding.root)
         btnBind()
         petDao = AppRoomDatabase.getDatabase(this).getPetDao()
+        guardianDao = AppRoomDatabase.getDatabase(this).getGuardianDao()
         datePickerDialog = DatePickerDialog(this)
         datePickerDialog.initYear(binding.etBirthYear)
         setComponent()
@@ -98,7 +100,16 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
                                                     return}
         }
         Thread{
-            val pet = Pet(name, birth, meetDate, weight, imgencodeByteArray)
+            val guardian = guardianDao.getGuardianInfo()
+            val pet = Pet(
+                guardianId =  guardian[0].id!!,
+                petName = name,
+                birthYear = birth,
+                meetDate = meetDate,
+                weight = weight,
+                image = imgencodeByteArray
+            )
+
             petDao.insertPetInfo(pet).run { Log.d("MyPetDiaryLogs", this.toString()) }
             runOnUiThread{
                 makeShortToast("등록되었습니다.")
@@ -146,6 +157,7 @@ class PetAddActivity : BaseActivity<ActivityPetAddBinding>({ ActivityPetAddBindi
             }
         builder.show()*/
     }
+    @SuppressLint("SuspiciousIndentation")
     fun openCamera() {
         createUri = createCameraUri()
             setMediaRequestListener { result ->

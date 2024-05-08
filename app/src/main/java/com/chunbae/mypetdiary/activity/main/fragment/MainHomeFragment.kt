@@ -1,6 +1,7 @@
 package com.chunbae.mypetdiary.activity.main.fragment
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,14 +14,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.chunbae.mypetdiary.R
-import com.chunbae.mypetdiary.activity.pet.PetMainHomeActivity
+import com.chunbae.mypetdiary.activity.inquiry.IVeterinaryDiaryActivity
 import com.chunbae.mypetdiary.activity.pet.fragment.FragmentEventListener
 import com.chunbae.mypetdiary.activity.pet.fragment.PetListFragment
-import com.chunbae.mypetdiary.activity.write.VeterinaryDiaryActivity
+import com.chunbae.mypetdiary.activity.write.WVeterinaryDiaryActivity
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -29,8 +29,9 @@ class MainHomeFragment : Fragment() {
     private lateinit var root: View
     private var eventListener: FragmentEventListener? = null
     private lateinit var context: Context
-    private var receivedData: Long = 0L
+    private var recevedPetId: Long = 0L
     private lateinit var currDate: String
+    private lateinit var dialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +41,7 @@ class MainHomeFragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_main_home, container, false)
 
         if(arguments?.getLong("petId") != null){
-            receivedData = arguments?.getLong("petId")!!
+            recevedPetId = (arguments?.getLong("petId"))!!
         }
         return root
     }
@@ -69,7 +70,7 @@ class MainHomeFragment : Fragment() {
         val fragmentManager = childFragmentManager
 
         val bundle = Bundle()
-        bundle.putLong("petId", this.receivedData)
+        bundle.putLong("petId", recevedPetId)
         fragment.arguments = bundle
 
         val transaction = fragmentManager.beginTransaction()
@@ -92,12 +93,11 @@ class MainHomeFragment : Fragment() {
             setPopupMenu("write", widget)
         }
 
+        //short click -> 조회팝업
         calendar.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             cal.set(date.year, date.month-1, date.day)
             val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
             currDate = dateFormat.format(cal.time)
-            Log.d("MyPetDiaryLogs", "${currDate}")
-
 
             //inquire
             setPopupMenu("inquire", widget)
@@ -110,7 +110,7 @@ class MainHomeFragment : Fragment() {
         layout.width = WindowManager.LayoutParams.WRAP_CONTENT
         layout.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        var dialog = AlertDialog.Builder(context)
+        dialog = AlertDialog.Builder(context)
             .setView(R.layout.menu_select_pop)
             .show()
             .also { dialog ->
@@ -122,14 +122,48 @@ class MainHomeFragment : Fragment() {
                 val symptom: Button = dialog.findViewById(R.id.btn_symptom)
                 val etc: Button = dialog.findViewById(R.id.btn_etc)
 
-                vVeterinary.setOnClickListener { writeVisitVeterinary() }
-                tMedicine.setOnClickListener { writeTakeMedicine() }
-                symptom.setOnClickListener { writeSymptom() }
-                etc.setOnClickListener { writeEtcMemo() }
+                when(type){
+                    //작성하기
+                    "write" -> {
+                        vVeterinary.setOnClickListener { writeVisitVeterinary() }
+                        tMedicine.setOnClickListener { writeTakeMedicine() }
+                        symptom.setOnClickListener { writeSymptom() }
+                        etc.setOnClickListener { writeEtcMemo() }
+                    }
+                    //조회팝업
+                    else -> {
+                        vVeterinary.setOnClickListener { inquireVisitVeterinary() }
+                        tMedicine.setOnClickListener { inquireTakeMedicine() }
+                        symptom.setOnClickListener { inquireSymptom() }
+                        etc.setOnClickListener { inquireEtcMemo() }
+                    }
+                }
+
+                
                 tv_tvView.text = currDate
             }
         dialog.window?.attributes = layout
         dialog.show()
+    }
+
+    private fun inquireEtcMemo() {
+        TODO("Not yet implemented")
+    }
+
+    private fun inquireSymptom(){
+
+    }
+    private fun inquireTakeMedicine() {
+        TODO("Not yet implemented")
+    }
+
+    private fun inquireVisitVeterinary() {
+        var intent = Intent(context, IVeterinaryDiaryActivity::class.java)
+        intent.putExtra("date", currDate)
+        intent.putExtra("petId", recevedPetId)
+        startActivity(intent)
+        Log.d("MyPetDiaryLogs", "inquiry veterinaryDiary")
+        dialog.dismiss()
     }
 
     private fun writeEtcMemo() {
@@ -141,13 +175,16 @@ class MainHomeFragment : Fragment() {
     }
 
     private fun writeVisitVeterinary(){
-        var intent:Intent = Intent(getContext(), VeterinaryDiaryActivity::class.java)
+        var intent:Intent = Intent(context, WVeterinaryDiaryActivity::class.java)
+        intent.putExtra("petId", recevedPetId)
         startActivity(intent)
+        dialog.dismiss()
         Log.d("MyPetDiaryLogs", "writeVisitVeterinary")
 
     }
     private fun writeTakeMedicine(){
         Log.d("MyPetDiaryLogs", "writeTakeMedicine")
     }
+
 
 }

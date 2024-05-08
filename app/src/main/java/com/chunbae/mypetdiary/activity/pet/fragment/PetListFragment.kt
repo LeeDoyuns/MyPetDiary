@@ -2,21 +2,19 @@ package com.chunbae.mypetdiary.activity.pet.fragment
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.chunbae.mypetdiary.R
 import com.chunbae.mypetdiary.activity.pet.PetListMainActivity
-import com.chunbae.mypetdiary.activity.pet.PetMainHomeActivity
 import com.chunbae.mypetdiary.activity.viewmodel.pet.VMPetList
 import com.chunbae.mypetdiary.common.DpToPixelConverter
 import com.chunbae.mypetdiary.common.ImageTypeConverter
@@ -24,6 +22,7 @@ import com.chunbae.mypetdiary.common.code.CommonStringCode
 import com.chunbae.mypetdiary.db.domain.pet.Pet
 import com.google.android.flexbox.FlexboxLayout
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.UUID
 
 class PetListFragment : Fragment() {
 
@@ -39,7 +38,7 @@ class PetListFragment : Fragment() {
     ): View? {
         root = inflater.inflate(R.layout.fragment_pet_list_fragment, container, false)
         imageTypeConverter = ImageTypeConverter()
-        vmPetList = ViewModelProvider(requireActivity()).get(VMPetList::class.java)
+        vmPetList = ViewModelProvider(requireActivity())[VMPetList::class.java]
 
         settingPetList(ArrayList<Pet>())
 
@@ -61,22 +60,17 @@ class PetListFragment : Fragment() {
     }
 
     fun settingPetList(petList: ArrayList<Pet>) {
-        //한마리만 등록한 경우, 바로 펫홈으로 보내준다..? 펫 추가하게 냅두기로 변경.
-        /*
-        if(petList.size == 1){
-            petList[0].id?.let { selectPet(it) }
-        }*/
         var flexboxLayout = root.findViewById<FlexboxLayout>(R.id.flex_layout)!!
         flexboxLayout.removeAllViews()
 
         if (petList.isNotEmpty()) {
-            var receivedData = 0L
-            if(arguments?.getLong("petId") != null){
+            var receivedData: Long = 0L
+            if(arguments?.getString("petId") != null){
                 receivedData = arguments?.getLong("petId")!!
             }
             for ((idx, pet) in petList.withIndex()) {
                 var btn = makeCircleImageButton(pet)
-                btn.setOnClickListener { selectPet(pet.id!!) }
+                btn.setOnClickListener { selectPet(pet.id) }
                 flexboxLayout.addView(btn, idx)
                 //선택한 petId로 선택 표시해줌
                 if(receivedData != null && pet.id == receivedData){
@@ -148,13 +142,17 @@ class PetListFragment : Fragment() {
     }
 
     //펫 메인 화면으로 이동
-    private fun selectPet(id: Long) {
+    private fun selectPet(id: Long?) {
         callActivityMethod(CommonStringCode.SEL_PET.value, id)
     }
 
     //펫 등록화면으로 이동
     private fun addPet() {
         callActivityMethod(CommonStringCode.ADD_PET.value, null)
+    }
+
+    fun Parcelable.toUUID(): UUID {
+        return UUID.fromString((this as Parcel).readString())
     }
 
 

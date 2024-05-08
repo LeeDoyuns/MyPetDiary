@@ -8,6 +8,7 @@ import androidx.room.Transaction
 import com.chunbae.mypetdiary.db.domain.pet.Pet
 import com.chunbae.mypetdiary.db.domain.user.Guardian
 import com.chunbae.mypetdiary.db.dto.PetAndGuardian
+import java.util.UUID
 
 @Dao
 interface GuardianDao {

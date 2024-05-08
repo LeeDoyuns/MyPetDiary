@@ -10,7 +10,6 @@ import javax.crypto.spec.SecretKeySpec
  */
 class CommonBcrypt {
 
-
     companion object {
         fun encryptPassword(pswd: String): String{
             try{
