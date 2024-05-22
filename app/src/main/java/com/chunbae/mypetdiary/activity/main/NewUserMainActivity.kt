@@ -90,5 +90,6 @@ class NewUserMainActivity : BaseActivity<ActivityNewUserMainBinding>({ActivityNe
     private fun moveJoinUserPage() {
         val intent = Intent(this, UserJoinActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

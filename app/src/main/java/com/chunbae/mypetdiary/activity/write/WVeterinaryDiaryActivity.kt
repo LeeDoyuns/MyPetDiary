@@ -86,7 +86,6 @@ class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({
     }
 
     //동물병원 방문기록 저장
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun save(){
         db = AppRoomDatabase.getInstance(this)!!
         guardianDao = db.getGuardianDao()

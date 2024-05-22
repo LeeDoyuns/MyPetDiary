@@ -2,10 +2,7 @@ package com.chunbae.mypetdiary.activity.inquiry
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.chunbae.mypetdiary.R
+import androidx.core.view.isVisible
 import com.chunbae.mypetdiary.common.activitys.BaseActivity
 import com.chunbae.mypetdiary.databinding.ActivityIveterinaryDiaryBinding
 import com.chunbae.mypetdiary.db.AppRoomDatabase
@@ -25,7 +22,6 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 //            insets
 //        }
-
         setContentView(binding.root)
         initData()
 
@@ -40,21 +36,39 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
         val db = AppRoomDatabase.getDatabase(this)
         var guardianId: Long? = 0L
         val vetDao = db.getVeterinaryReportDao()
-        var medicine: List<VMedicine>?
-        var images: List<Images>?
 
         //하루에 여러개 입력 할 수도...
         Thread{
             guardianId = db.getGuardianDao().getGuardianInfo()[0].id
             val veterinary: List<Veterinary>? = vetDao.selectVeterinaryReports(date, petId)
-            if (veterinary != null) {
-                for(i in 0 until veterinary.size){
-                    medicine = vetDao.selectVMedicineList(veterinary[i].id!!)
-                    images = vetDao.selectVImageList(veterinary[i].id!!)
-                }
+            val vetId = veterinary?.map { vet -> vet.id }?.toList()
+            if (!vetId.isNullOrEmpty()) {
+                val medicine = vetDao.selectVMedicineList(vetId)
+                val images = vetDao.selectVImageList(vetId)
+                //조회한 데이터들로 화면에 set
+                setViewData(veterinary, medicine, images)
+            }else {
+                binding.emptyData.isVisible = true
+                binding.layoutMain.isVisible = false
             }
-
         }.start()
+    }
+
+    private fun setViewData(veterinary: List<Veterinary>
+                            , medicine: List<VMedicine>?
+                            , images: List<Images>?){
+        veterinary.forEachIndexed{idx, vet ->
+            if(idx == 0){
+                binding.tvDate.setText(vet.visitDate)
+            }else{
+                addVeterinaryContents(idx, vet)
+            }
+        }
+
+
+    }
+
+    private fun addVeterinaryContents(idx: Int, vet: Veterinary){
 
     }
 
