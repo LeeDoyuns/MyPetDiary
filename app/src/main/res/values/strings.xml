@@ -116,6 +116,7 @@
     <string name="veterinary_report">병원기록</string>
     <string name="date">날짜</string>
     <string name="veterinary_name">병원명</string>
+    <string name="vet_name">진료자</string>
     <string name="kg">KG</string>
     <string name="treat_contents">진료내용</string>
     <string name="treat_result_contents">진료내역, 결과를 입력해주세요.(이미지 파일 최대 6장)</string>
@@ -126,6 +127,6 @@
     <string name="save">저장</string>
     <string name="modifie">수정</string>
     <string name="emptyMemo">저장된 메모가 없습니다.</string>
-
+    <string name="etc_memo">기타 메모</string>
 
 </resources>

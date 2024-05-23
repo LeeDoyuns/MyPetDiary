@@ -279,6 +279,7 @@ class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({
         //이미지 제거를 위한 onclickListener
         imgView.setOnClickListener { it ->
             imgList.removeAt(it.tag as Int)
+            binding.vetFlexLayout.removeView(it)
         }
         binding.vetFlexLayout.addView(imgView)
     }

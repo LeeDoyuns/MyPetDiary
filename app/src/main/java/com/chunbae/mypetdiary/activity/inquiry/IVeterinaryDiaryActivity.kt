@@ -1,8 +1,12 @@
 package com.chunbae.mypetdiary.activity.inquiry
 
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.isVisible
+import com.chunbae.mypetdiary.common.ImageTypeConverter
 import com.chunbae.mypetdiary.common.activitys.BaseActivity
 import com.chunbae.mypetdiary.databinding.ActivityIveterinaryDiaryBinding
 import com.chunbae.mypetdiary.db.AppRoomDatabase
@@ -13,6 +17,7 @@ import com.chunbae.mypetdiary.db.domain.write.Veterinary
 class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({ActivityIveterinaryDiaryBinding.inflate(it)}) {
 
     private lateinit var date: String
+    private val imageConverter: ImageTypeConverter = ImageTypeConverter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +54,7 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
                 setViewData(veterinary, medicine, images)
             }else {
                 binding.emptyData.isVisible = true
-                binding.layoutMain.isVisible = false
+                binding.layoutScroll.isVisible = false
             }
         }.start()
     }
@@ -58,21 +63,65 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
                             , medicine: List<VMedicine>?
                             , images: List<Images>?){
         veterinary.forEachIndexed{idx, vet ->
-            if(idx == 0){
-                binding.tvDate.setText(vet.visitDate)
-            }else{
+            if(idx == 0){   //한개만 있으면 그냥 셋팅..
+                binding.etDate.text = vet.visitDate
+                binding.etVeterinary.text = vet.veterinaryName
+                binding.etVet.text = vet.technicianName
+                binding.etWieght.text = vet.weight.toString()
+                binding.etMedicalRecords.text = vet.content
+                if(!images.isNullOrEmpty()) addImages(images)
+                if(!medicine.isNullOrEmpty()) addMedicines(medicine)
+                binding.etEtcMemo.text = vet.etcMemo
+            }else{  //하루에 한개 이상일경우..
                 addVeterinaryContents(idx, vet)
             }
         }
-
-
     }
 
+    //동적으로 동물병원 방문일지 추가
     private fun addVeterinaryContents(idx: Int, vet: Veterinary){
 
     }
 
     private fun btnClickEventSet(){
 
+    }
+
+    private fun addMedicines(medicines: List<VMedicine>){
+        val lLayout = binding.listMedicine
+        medicines.forEach { m ->
+            val medicineName: TextView = TextView(this)
+            val medicineVolume: TextView = TextView(this)
+            medicineName.minWidth = 130
+            medicineName.textSize = 13.0F
+            medicineVolume.minWidth = 50
+            medicineVolume.textSize = 13.0F
+
+            medicineName.text = m.medicineName
+            medicineVolume.text = "${m.medicineVolume} ${m.medicineUnit}"
+            lLayout.addView(medicineName)
+            lLayout.addView(medicineVolume)
+        }
+    }
+
+    private fun addImages(images: List<Images>) {
+        val flxLayout = binding.vetFlexLayout
+        images.forEach { img ->
+            val bitmapImg = imageConverter.toBitmap(img.img)
+            val imgView: ImageView = ImageView(this)
+            val layoutParam = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            layoutParam.setMargins(10, 0, 10, 0)
+            layoutParam.width = 60
+            layoutParam.height = 60
+            imgView.scaleType = ImageView.ScaleType.CENTER_CROP
+
+            imgView.setTag(if (images.size - 1 < 0) 0 else images.size)
+            imgView.layoutParams = layoutParam
+            imgView.setImageBitmap(bitmapImg)
+
+            flxLayout.addView(imgView)
+        }
     }
 }

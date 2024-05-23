@@ -1,6 +1,7 @@
 package com.chunbae.mypetdiary.common.activitys
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,6 +13,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -67,6 +69,36 @@ abstract class BaseActivity<T: ViewBinding> (
     open fun Activity.startIntent(destination: Class<out Activity>){
         val intent = Intent(this, destination)
         startActivity(intent)
+    }
+
+    /*특정 뷰 하단까지복사*/
+    open fun copyView(view: View): View?{
+        return try{
+            val construnctor = view::class.java.getConstructor(Context::class.java)
+            val copiedView = construnctor.newInstance(view.context)
+            view.layoutParams?.let { copiedView.layoutParams = it }
+            copiedView
+        } catch (e: Exception){
+            e.printStackTrace()
+            null
+        }
+    }
+
+    open fun copyViewBelow(specificView: View){
+
+        specificView as LinearLayout
+        val newLayout = LinearLayout(this)
+        newLayout.orientation = LinearLayout.VERTICAL
+
+        for(i in 0 until specificView.childCount){
+            val childView = specificView.getChildAt(i)
+            val copiedView = copyView(childView)
+
+            if(copiedView != null) newLayout.addView(copiedView)
+        }
+
+        val parentLayout = specificView.parent as? ViewGroup?: return
+        parentLayout.addView(newLayout)
     }
 
 
