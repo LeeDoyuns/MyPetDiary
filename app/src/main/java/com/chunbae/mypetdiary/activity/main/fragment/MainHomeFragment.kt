@@ -30,7 +30,7 @@ class MainHomeFragment : Fragment() {
     private var eventListener: FragmentEventListener? = null
     private lateinit var context: Context
     private var recevedPetId: Long = 0L
-    private lateinit var currDate: String
+    private lateinit var selectedDate: String
     private lateinit var dialog: Dialog
 
     override fun onCreateView(
@@ -86,9 +86,11 @@ class MainHomeFragment : Fragment() {
 
         //Long click -> 등록팝업
         calendar.setOnDateLongClickListener { widget, date ->
+            Log.d("MyPetDiaryLogs", "sedlectedDate = $date")
             cal.set(date.year, date.month-1, date.day)
-            val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
-            currDate = dateFormat.format(cal.time)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            selectedDate = dateFormat.format(cal.time)
+            Log.d("MyPetDiaryLogs", "selectedDate = > $selectedDate")
             //write
             setPopupMenu("write", widget)
         }
@@ -96,8 +98,9 @@ class MainHomeFragment : Fragment() {
         //short click -> 조회팝업
         calendar.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             cal.set(date.year, date.month-1, date.day)
-            val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
-            currDate = dateFormat.format(cal.time)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            selectedDate = dateFormat.format(cal.time)
+            Log.d("MyPetDiaryLogs", "selectedDate = > $selectedDate")
 
             //inquire
             setPopupMenu("inquire", widget)
@@ -138,9 +141,7 @@ class MainHomeFragment : Fragment() {
                         etc.setOnClickListener { inquireEtcMemo() }
                     }
                 }
-
-                
-                tv_tvView.text = currDate
+                tv_tvView.text = selectedDate
             }
         dialog.window?.attributes = layout
         dialog.show()
@@ -159,7 +160,7 @@ class MainHomeFragment : Fragment() {
 
     private fun inquireVisitVeterinary() {
         var intent = Intent(context, IVeterinaryDiaryActivity::class.java)
-        intent.putExtra("date", currDate)
+        intent.putExtra("date", selectedDate)
         intent.putExtra("petId", recevedPetId)
         startActivity(intent)
         Log.d("MyPetDiaryLogs", "inquiry veterinaryDiary")
@@ -177,6 +178,7 @@ class MainHomeFragment : Fragment() {
     private fun writeVisitVeterinary(){
         var intent:Intent = Intent(context, WVeterinaryDiaryActivity::class.java)
         intent.putExtra("petId", recevedPetId)
+        intent.putExtra("selectedDate", selectedDate)
         startActivity(intent)
         dialog.dismiss()
         Log.d("MyPetDiaryLogs", "writeVisitVeterinary")

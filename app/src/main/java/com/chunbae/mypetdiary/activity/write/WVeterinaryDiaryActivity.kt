@@ -35,6 +35,7 @@ import com.chunbae.mypetdiary.db.domain.write.Images
 import com.chunbae.mypetdiary.db.domain.write.VMedicine
 import com.chunbae.mypetdiary.db.domain.write.Veterinary
 import java.io.IOException
+import java.util.Calendar
 
 class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({ ActivityWveterinaryDiaryBinding.inflate(it) }){
     private val CAMERA_PERMISSION = Manifest.permission.CAMERA
@@ -45,6 +46,7 @@ class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({
 
     //db
     private lateinit var db: AppRoomDatabase
+    private var selectedDate: String = ""
     private lateinit var guardianDao: GuardianDao
     private lateinit var vetDao: VeterinaryReportDao
 
@@ -59,12 +61,17 @@ class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({
         btnClickEventSet()
 
         petId = intent.getLongExtra("petId", 0L)
+        selectedDate = intent.getStringExtra("selectedDate")!!
 
     }
     private fun initComponent(){
         //방문날짜 기본값 지정. 당일.
         datePickerDialog = DatePickerDialog(this)
-        binding.etDate.setText(datePickerDialog.getDate().toString())
+//        val cal = Calendar.getInstance()
+//        var dateSplit = selectedDate.split("-")
+//        cal.set(dateSplit[0].toInt(), dateSplit[1].toInt(), dateSplit[2].toInt())
+
+        binding.etDate.setText(selectedDate)
     }
     //버튼클릭 이벤트
     private fun btnClickEventSet(){
@@ -110,6 +117,7 @@ class WVeterinaryDiaryActivity : BaseActivity<ActivityWveterinaryDiaryBinding>({
                 etcMemo = etcMemo,
                 visitDate = etDate
             )
+            Log.d("MyPetDiaryLogs", "record Veterinary Report => ${record.toString()}")
             val mGrp: LinearLayout = binding.grpMedicine
             val vetId = vetDao.insertVeterinaryReport(record)
             for (i in 0 until mGrp.childCount){

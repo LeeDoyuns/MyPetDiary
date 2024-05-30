@@ -22,7 +22,7 @@ import com.chunbae.mypetdiary.db.domain.write.Veterinary
     Veterinary::class,
     Images::class,
     VMedicine::class
-    ), version = 1)
+    ), version = 2)
 @TypeConverters(
     value = [
         DateConverter::class,

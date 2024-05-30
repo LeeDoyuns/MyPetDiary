@@ -1,6 +1,7 @@
 package com.chunbae.mypetdiary.activity.inquiry
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -46,6 +47,7 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
         Thread{
             guardianId = db.getGuardianDao().getGuardianInfo()[0].id
             val veterinary: List<Veterinary>? = vetDao.selectVeterinaryReports(date, petId)
+            Log.d("MyPetDiaryLogs", "guardianId=>$guardianId, veterinaryList=> $veterinary")
             val vetId = veterinary?.map { vet -> vet.id }?.toList()
             if (!vetId.isNullOrEmpty()) {
                 val medicine = vetDao.selectVMedicineList(vetId)
@@ -64,23 +66,41 @@ class IVeterinaryDiaryActivity : BaseActivity<ActivityIveterinaryDiaryBinding>({
                             , images: List<Images>?){
         veterinary.forEachIndexed{idx, vet ->
             if(idx == 0){   //한개만 있으면 그냥 셋팅..
-                binding.etDate.text = vet.visitDate
-                binding.etVeterinary.text = vet.veterinaryName
-                binding.etVet.text = vet.technicianName
-                binding.etWieght.text = vet.weight.toString()
-                binding.etMedicalRecords.text = vet.content
-                if(!images.isNullOrEmpty()) addImages(images)
-                if(!medicine.isNullOrEmpty()) addMedicines(medicine)
-                binding.etEtcMemo.text = vet.etcMemo
+                setVeterinayDiaryData(vet, images, medicine)
             }else{  //하루에 한개 이상일경우..
-                addVeterinaryContents(idx, vet)
+                addVeterinaryContents(idx, vet, images, medicine)
             }
         }
     }
 
     //동적으로 동물병원 방문일지 추가
-    private fun addVeterinaryContents(idx: Int, vet: Veterinary){
+    private fun addVeterinaryContents(
+        idx: Int,
+        vet: Veterinary,
+        images: List<Images>?,
+        medicine: List<VMedicine>?,
+        ){
+        copyViewOrLayout(this, binding.layoutScroll)
+        setVeterinayDiaryData(vet, images, medicine)
+    }
 
+    private fun setVeterinayDiaryData(
+        vet: Veterinary,
+        images: List<Images>?,
+        medicines: List<VMedicine>?
+    ) {
+        binding.etDate.text = vet.visitDate
+        binding.etVeterinary.text = vet.veterinaryName
+        binding.etVet.text = vet.technicianName
+        binding.etWieght.text = vet.weight.toString()
+        binding.etMedicalRecords.text = vet.content
+        if(!images.isNullOrEmpty()) addImages(images.filter{
+            it.vet == vet.id
+        }.toList())
+        if(!medicines.isNullOrEmpty()) addMedicines(medicines.filter{
+            it.vet == vet.id
+        }.toList())
+        binding.etEtcMemo.text = vet.etcMemo
     }
 
     private fun btnClickEventSet(){

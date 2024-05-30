@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
 import com.chunbae.mypetdiary.R
 import com.chunbae.mypetdiary.common.DpToPixelConverter
@@ -71,36 +72,30 @@ abstract class BaseActivity<T: ViewBinding> (
         startActivity(intent)
     }
 
-    /*특정 뷰 하단까지복사*/
-    open fun copyView(view: View): View?{
-        return try{
-            val construnctor = view::class.java.getConstructor(Context::class.java)
-            val copiedView = construnctor.newInstance(view.context)
-            view.layoutParams?.let { copiedView.layoutParams = it }
-            copiedView
-        } catch (e: Exception){
-            e.printStackTrace()
-            null
+    /*특정 뷰 하위 뷰까지복사*/
+
+    open fun copyViewOrLayout(
+        context: Context,
+        parentLayout: ViewGroup,
+    ) {
+        val specificView = LinearLayout(context)
+        specificView.layoutParams = parentLayout.layoutParams
+        specificView.orientation = (specificView as? LinearLayout)
+            ?.orientation ?: LinearLayout.VERTICAL
+
+        parentLayout.children.forEach { child ->
+            val copiedChild = when(child) {
+                is ViewGroup -> copyViewOrLayout(context, child)
+                is View -> {
+                    val copiedView = View(context)
+                    copiedView.layoutParams = child.layoutParams
+                    copiedView
+                }
+                else -> View(context)
+            }
+            copiedChild.let { parentLayout.addView(it as View) }
         }
     }
-
-    open fun copyViewBelow(specificView: View){
-
-        specificView as LinearLayout
-        val newLayout = LinearLayout(this)
-        newLayout.orientation = LinearLayout.VERTICAL
-
-        for(i in 0 until specificView.childCount){
-            val childView = specificView.getChildAt(i)
-            val copiedView = copyView(childView)
-
-            if(copiedView != null) newLayout.addView(copiedView)
-        }
-
-        val parentLayout = specificView.parent as? ViewGroup?: return
-        parentLayout.addView(newLayout)
-    }
-
 
 
     /*카메라 관련 설정*/
